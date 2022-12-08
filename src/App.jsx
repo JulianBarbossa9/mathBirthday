@@ -1,159 +1,183 @@
 import { useState } from "react";
-import styled from '@emotion/styled'
-import moment from 'moment'
-import { addDays } from 'date-fns';
+import styled from "@emotion/styled";
+import moment from "moment";
+import { addDays } from "date-fns";
 
 const Input = styled.input`
   background-color: #242424;
   padding: 10px;
-  color: #ffff; 
-  margin-top: 20px;
+  color: #ffff;
+  margin-top: 5px;
   border: none;
   outline: none;
   text-align: center;
   font-size: 20px;
   border-radius: 5px;
-  font-family: "Roboto Mono",monospace;
-  ::-webkit-calendar-picker-indicator{
+  font-family: "Roboto Mono", monospace;
+  ::-webkit-calendar-picker-indicator {
     background-color: #242424;
     padding: 5px;
-    border-radius: 3px; 
+    border-radius: 3px;
   }
-`
+`;
 
 const Title = styled.h1`
   font-weight: 900;
   font-size: 50px;
-`
+  text-decoration: underline;
+`;
 
-const Container= styled.div`
+const Container = styled.div`
   width: 90%;
-	max-width: 1000px;
-	margin: 50px auto;
-	text-align: center;
-	background: #fff;
-	box-shadow: 0px 0px 20px 0px rgba(209, 209, 209, 0.5);
-	padding: 40px;
-	border-radius: 10px;
-	display: flex;
-	gap: 20px;
-` 
+  max-width: 1000px;
+  margin: 50px auto;
+  /* text-align: center; */
+  background: #fff;
+  box-shadow: 0px 0px 20px 0px rgba(209, 209, 209, 0.5);
+  padding: 40px;
+  border-radius: 10px;
+  display: flex;
+  gap: 20px;
+`;
 
 const Group = styled.div`
   display: flex;
-	flex-direction: column;
-	width: 100%;
-`
+  flex-direction: column;
+`;
 
 const Label = styled.label`
   width: 100%;
-	font-size: 24px;
-	color:#242424;
-  font-weight: 500px;
+  font-size: 24px;
+  color: #242424;
+  font-weight: 600;
   margin-top: 20px;
-`
+  text-align: left;
+`;
 
+const Button = styled.button`
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #5c5959;
+  margin-top: 40px;
+  font-weight: bold;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
 
+  &:hover {
+    background-color: #7a7979;
+  }
+`;
+
+const Phara = styled.p`
+  color: #7a7979;
+  font-size: 20px;
+  margin-top: 10px;
+`;
+
+const Birthday = styled.p`
+  text-decoration: underline;
+  color: #2e2c2c;
+  font-size: 22px;
+  margin-bottom: 10px;
+  font-weight: 600;
+`;
+
+// --------------- //
 
 function App() {
+  const [dateSelect, setDateSelect] = useState({
+    date: "",
+    number: 1,
+  });
+
+  const [result, setResult] = useState([]);
 
   
-  const [ dateSelect, stateDate] = useState({
-    date:new Date(),
-    number: 0,
-  }); 
 
-  
-  console.log(dateSelect) // Sat Dec 03 2022 (esto es un objeto)
-
-  const handleChange = e => {
-    stateDate({
+  const handleChange = (e) => {
+    setDateSelect({
       ...dateSelect,
-      [e.target.name]: e.target.value
-    })
-  }
-
+      [e.target.name]: e.target.value,
+    });
+  };
 
   //Extract Data
   const { date, number } = dateSelect;
 
-  console.log(date)
 
-  var c = moment(date).add(10,'day').format('LL')
-  var d = moment("29402-01-05").add(100000005,'day').format('LL')
-  
-  console.log("Futuro Cumple: " + c)
-  console.log("Futuro Cumple d: " + d)
-
-  
-  // let dayBirth = date.getDate()
-  let dayBirth = new Date(date).getDate() 
-  console.log("dia extraido: " + dayBirth)
-  let days_birth = []
-  function calcNextDays(number){
-    for (let i = 1; i <= number; i++){
-      let days = 1 + dayBirth+ Math.pow(10, i);
-      days_birth.push(days)
-      
+  function calcNextDays(number) {
+    let days_birth = [];
+    let dayBirth = new Date(date).getDate() + 1;
+    for (let i = 1; i <= number; i++) {
+      let days = dayBirth + Math.pow(10, i);
+      days_birth.push(days);
     }
-    return days_birth
+    return days_birth;
   }
 
-  // let pp = calcNextDays(number)
-  // console.log(pp)
-  
-  let arrDays = []
-  function calculate(){
-    let posible_days = calcNextDays(number)
-    // console.log("days " + posible_days)
-    // for (let i = 0; i <= posible_days.length; i++){
-    //   let finalDay =  moment(date).add(posible_days[i],'day').format('LL')
-    //   console.log(posible_days[i])
-    //   arrDays.push(finalDay)
-    // }
-    // }
-    // 
-    // const resultadov2 = dateSelect.setDate() 
-    // const resultado = dateSelect.getDate() + '/' + (dateSelect.getMonth() + 1) + '/' + dateSelect.getFullYear(); 
-  //   let dayModi = posible_days.forEach((num, index) => {
-  //     console.log('Indice - ' + index + ' Valor: ' + num)
-  //   // return arrDays   
-  //   let result = arrDays.push(dayModi)
-  //   return result
-  // })
-    for (let value of posible_days){
-      console.log(value)
-      let finalDay =  moment(date).add(value,'day').format('LL')
-      arrDays.push(finalDay)
-    }
-    return arrDays
-}
 
-  let funCont = calculate()
-  console.log(funCont)
-  
- 
+
+  function calculate() {
+    let arrDates = [];
+    let posibleDays = calcNextDays(number);
+    for (let value of posibleDays) {
+      let finalDate = moment(date).add(value, "day").format("LL");
+      arrDates.push(finalDate);
+    }
+    return arrDates;
+  }
+
+  const onSubmit = () => {
+    console.log("Calculating...");
+    const funCont = calculate();
+    setResult(funCont);
+  };
+
   return (
     <>
-      <Title>Select Your Birthday</Title>
-      <Container>
-        <Group>
-          <Label>Date</Label>
-            <Input
-              type="date"
-              name="date"
-              onChange={handleChange}
-              value={date}
-            />
-          <Label>Birthday Number</Label>
-            <Input
-              type="number"
-              name="number"
-              onChange={handleChange}
-              value={number}
-            />
-        </Group>
-      </Container>
+      {result.length > 0 ? (
+        <>
+          <Title>Your Next Birthday</Title>
+          <Container>
+            <Group>
+              <Birthday>Your Birthday: {date}</Birthday>
+              {result.map((date, index) => (
+                <Phara key={index}>{`Birthday # ${index + 1}: ${date}`}</Phara>
+              ))}
+              <Button type="submit" onClick={() => setResult([])}>RESET</Button>
+            </Group>
+          </Container>
+        </>
+      ) : (
+        <>
+          <Title>Select Your Birthday</Title>
+          <Container>
+            <form onSubmit={onSubmit}>
+              <Group>
+                <Label>Date</Label>
+                <Input
+                  type="date"
+                  name="date"
+                  onChange={handleChange}
+                  value={date}
+                  required
+                />
+                <Label>Birthday Number</Label>
+                <Input
+                  type="number"
+                  name="number"
+                  onChange={handleChange}
+                  value={number}
+                  min="1"
+                  max="7"
+                />
+                <Button type="submit">SEND</Button>
+              </Group>
+            </form>
+          </Container>
+        </>
+      )}
     </>
   );
 }
